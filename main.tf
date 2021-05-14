@@ -1,27 +1,4 @@
-//--------------------------EMEA-SE_PLAYGROUND-2019-----------------------------------------
-# Using a single workspace:
 
-terraform {
-  backend "remote" {
-    organization = "emea-se-playground-2019"
-
-    workspaces {
-      name = "GUY-HCP-DEMOSTACK-GCP"
-    }
-  }
-}
-
-data "terraform_remote_state" "dns" {
-  backend = "remote"
-
-  config = {
-    hostname     = "app.terraform.io"
-    organization = "emea-se-playground-2019"
-    workspaces = {
-      name = "Guy-DNS-Zone"
-    }
-  } //network
-}
 //--------------------------------------------------------------------
 
 provider "aws" {
@@ -39,18 +16,24 @@ provider "consul" {
 provider "hcp" {
 
 }
-/*
+
 provider "google" {
   project = var.gcp_project
   region  = var.gcp_region
 }
-*/
+
+data "google_compute_zones" "available" {
+}
+
+
+module "network" {
+  source         = "./modules/network"
+  cust_name      = var.cust_name
+  vpc_cidr_block = var.vpc_cidr_block
+}
 
 module "primarycluster" {
-  providers = {
-    aws.demostack = aws.primary
-    aws           = aws.primary
-  }
+
   source               = "./modules"
   # count   = var.create_primary_cluster ? 1 : 0
   owner                = var.owner
@@ -69,6 +52,18 @@ module "primarycluster" {
   TTL                  = var.TTL
   vpc_cidr_block       = var.vpc_cidr_block
   cidr_blocks          = var.cidr_blocks
+  ####### GCP
+  gcp_project          = var.gcp_project
+  gcp_region           = var.gcp_region
+  network-main         = module.network.network_link
+  network-sub          = module.network.subnet_link
+  gcp_dns_zone_name    = data.terraform_remote_state.dns.outputs.gcp_dns_zone_name
+  zones                = data.terraform_remote_state.dns.outputs.gcp_dns_zone_name
   zone_id              = data.terraform_remote_state.dns.outputs.aws_sub_zone_id
 }
+
+
+
+
+
 

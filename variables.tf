@@ -142,3 +142,46 @@ variable "hcp_vault_cluster_id" {
   description = "the HCP Consul Cluster ID that you  want to use"
   default     = "demostack"
 }
+
+
+######################## GCP
+
+
+variable "cust_name" {
+  description = "Customer name"
+  default = "demo"
+}
+
+variable "gcp_project" {
+  description = "GCP project name"
+}
+
+variable "gcp_region" {
+  description = "GCP region, e.g. us-east1"
+  default     = "europe-west3"
+}
+
+variable "gcp_dns_zone_name" {
+  description = "The name of the dns zone record in the GCP DNS console Not the FQDN"
+   default = ""
+}
+
+variable "zones" {
+  description = "Computed zones from GCP"
+   default = ""
+}
+
+variable "network-main" {
+  description = "Computed Main Network link"
+   default = ""
+}
+
+variable "network-sub" {
+  description = "Computed Subnetwork link"
+   default = ""
+}
+
+variable "keyring_location" {
+  default = "global"
+}
+

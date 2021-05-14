@@ -154,7 +154,7 @@ variable "hcp_vault_cluster_id" {
 }
 
 ######################## GCP
-/*
+
 variable "gcp_project" {
   description = "GCP project name"
 }
@@ -167,4 +167,25 @@ variable "gcp_region" {
 variable "gcp_dns_zone_name" {
   description = "The name of the dns zone record in the GCP DNS console Not the FQDN"
 }
-*/
+
+variable "zones" {
+  description = "Computed zones from GCP"
+}
+
+variable "network-main" {
+  description = "Computed Main Network link"
+}
+
+variable "network-sub" {
+  description = "Computed Subnetwork link"
+}
+
+variable "keyring_location" {
+  default = "global"
+}
+
+
+variable "cust_name" {
+  description = "Customer name"
+  default = "demo"
+}
